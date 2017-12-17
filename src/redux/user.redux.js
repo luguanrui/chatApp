@@ -3,13 +3,17 @@
  */
 import axios from 'axios';
 
+import {getRedirectPath} from '../util'
+
 const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 const ERROR_MSG = 'ERROR_MSG';
 
 /**
  * 用户初始化信息
+ * 登录，注册之后，页面的跳转也由redux来实现
  */
 const initState = {
+    redirectTo: '',//路由跳转
     isAuth: '',// 是否登录
     msg: '',// 有没有报错信息
     user: '',// 用户名
@@ -18,11 +22,16 @@ const initState = {
 
 };
 
-// reducer
+/**
+ * reducer
+ * @param state
+ * @param action
+ * @returns {*}
+ */
 export function user(state = initState, action) {
     switch (action.type) {
         case REGISTER_SUCCESS:
-            return {...state, msg: '', isAuth: true, ...action.payload};
+            return {...state, msg: '', isAuth: true, ...action.payload, redirectTo: getRedirectPath(action.payload)};
         case ERROR_MSG:
             return {...state, msg: action.msg, isAuth: false};
         default:
