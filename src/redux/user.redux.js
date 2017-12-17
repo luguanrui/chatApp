@@ -9,6 +9,7 @@ import {getRedirectPath} from '../util'
 const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const ERROR_MSG = 'ERROR_MSG';
+const LOAD_DATA = 'LOAD_DATA'
 
 /**
  * 用户初始化信息
@@ -19,7 +20,6 @@ const initState = {
     isAuth: '',// 是否登录
     msg: '',// 有没有报错信息
     user: '',// 用户名
-    pwd: '',// 密码
     type: ''// 身份
 
 };
@@ -38,6 +38,8 @@ export function user(state = initState, action) {
             return {...state, msg: '', isAuth: true, ...action.payload, redirectTo: getRedirectPath(action.payload)};
         case ERROR_MSG:
             return {...state, msg: action.msg, isAuth: false};
+        case LOAD_DATA:
+            return {...state, ...action.payload};
         default:
             return state;
     }
@@ -68,6 +70,10 @@ function loginSuccess(data) {
  */
 function errorMsg(msg) {
     return {type: ERROR_MSG, msg: msg};
+}
+
+export function loadData(userinfo) {
+    return {type: 'LOAD_DATA', payload: userinfo};
 }
 
 /**

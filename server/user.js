@@ -7,10 +7,25 @@ const model = require('./model');
 // 获取模型
 const User = model.getModel('user');
 
+// 过滤掉返回的pwd
+const _filter = {'pwd': 0, '__v': 0};
+
 // 查询用户信息 /user/info
 Router.get('/info', function (req, res) {
-    // 用户有没有cookie
-    return res.json({code: 1})
+    // 用户有没有cookie,会导致跳转的info页面刷新的时候返回到原来的页面
+    const {userid} = req.cookies;
+    if (!userid) {
+        return res.json({code: 1})
+    }
+    User.findOne({_id: userid}, _filter, function (err, doc) {
+        if (err) {
+            return res.json({code: 1, msg: '后端出错了'})
+        }
+        if (doc) {
+            return res.json({code: 0, data: doc})
+        }
+    })
+
 });
 
 // 查询用户列表,/user/list
@@ -31,12 +46,14 @@ Router.post('/register', function (req, res) {
         if (doc) {
             return res.json({code: 1, msg: '用户名重复'})
         }
-        // pwd加密
-        User.create({user, type, pwd: md5Pwd(pwd)}, function (err, doc) {
+        const userModel = new User({user, type, pwd: md5Pwd(pwd)});
+        userModel.save(function (err, doc) {
             if (err) {
                 return res.json({code: 1, msg: '后端出错了'})
             }
-            return res.json({code: 0})
+            const {user, type, _id} = doc;
+            res.cookie('userid', _id);
+            return res.json({code: 0, data: {user}})
         })
     })
 });
@@ -44,10 +61,12 @@ Router.post('/register', function (req, res) {
 // findOne的第二个参数是忽略查询的字段pwd,__v
 Router.post('/login', function (req, res) {
     const {user, pwd} = req.body;
-    User.findOne({user, pwd: md5Pwd(pwd)}, {'pwd': 0,"__v":0}, function (err, doc) {
+    User.findOne({user, pwd: md5Pwd(pwd)}, _filter, function (err, doc) {
         if (!doc) {
             return res.json({code: 1, msg: '用户名或者密码错误'})
         }
+        // 将数据保存到cookie
+        res.cookie('userid', doc._id);
         return res.json({code: 0, data: doc})
     })
 
