@@ -41,6 +41,7 @@ class Register extends React.Component {
                 {this.props.redirectTo?<Redirect to={this.props.redirectTo}></Redirect> : null}
                 <Logo></Logo>
                 <List>
+                    {/*注册失败信息提示*/}
                     {this.props.msg ? <p className='error-msg'>{this.props.msg}</p> : null}
                     <InputItem
                         onChange={v => this.handleChange('user', v)}>用户名</InputItem

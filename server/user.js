@@ -15,9 +15,12 @@ Router.get('/info', function (req, res) {
 
 // 查询用户列表,/user/list
 Router.get('/list', function (req, res) {
+    // 清空数据库
+    // User.remove({},function (err,doc) {});
+    // 查找数据库所有内容
     User.find({}, function (err, doc) {
         return res.json(doc)
-    })
+    });
 });
 
 // 注册接口,需要引入插件body-parser，专门接受post参数
@@ -36,6 +39,18 @@ Router.post('/register', function (req, res) {
             return res.json({code: 0})
         })
     })
+});
+// 登录接口，查询数据库中是否有用户
+// findOne的第二个参数是忽略查询的字段pwd,__v
+Router.post('/login', function (req, res) {
+    const {user, pwd} = req.body;
+    User.findOne({user, pwd: md5Pwd(pwd)}, {'pwd': 0,"__v":0}, function (err, doc) {
+        if (!doc) {
+            return res.json({code: 1, msg: '用户名或者密码错误'})
+        }
+        return res.json({code: 0, data: doc})
+    })
+
 })
 
 // md5加盐
