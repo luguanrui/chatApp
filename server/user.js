@@ -1,4 +1,6 @@
 const express = require('express');
+// md5加密
+const utils = require('utility');
 const Router = express.Router();
 const model = require('./model');
 
@@ -20,15 +22,15 @@ Router.get('/list', function (req, res) {
 
 // 注册接口,需要引入插件body-parser，专门接受post参数
 Router.post('/register', function (req, res) {
-    console.log(res.body);
     const {user, pwd, type} = req.body;
     // 查询一条user信息（因为user唯一）
     User.findOne({user: user}, function (err, doc) {
         if (doc) {
             return res.json({code: 1, msg: '用户名重复'})
         }
-        User.create({user, pwd, type}, function (e, d) {
-            if (e) {
+        // pwd加密
+        User.create({user, type, pwd: md5Pwd(pwd)}, function (err, doc) {
+            if (err) {
                 return res.json({code: 1, msg: '后端出错了'})
             }
             return res.json({code: 0})
@@ -36,5 +38,11 @@ Router.post('/register', function (req, res) {
     })
 })
 
+// md5加盐
+function md5Pwd(pwd) {
+    const salt = 'imooc_is_good_2432342342!@#$%^fsddJJKK';
+    return utils.md5(utils.md5(pwd + salt));
+
+}
 
 module.exports = Router;
