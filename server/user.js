@@ -82,7 +82,6 @@ function md5Pwd(pwd) {
 
 // bossinfo数据提交的接口
 Router.post('/update', function (req, res) {
-    console.log(req)
     // 1、获取用户登录的cookies的userid
     const userid = req.cookies.userid;
     // 如果用户未登录，返回code：1

@@ -32,7 +32,7 @@ ReactDOM.render(
                 <AuthRoute></AuthRoute>
                 <Switch>
                     <Route path='/bossinfo' component={BossInfo}></Route>
-                    <Route path='/geniusinfo' compoent={GeniusInfo}></Route>
+                    <Route path='/geniusinfo' component={GeniusInfo}></Route>
                     <Route path='/login' component={Login}></Route>
                     <Route path='/register' component={Register}></Route>
                 </Switch>
