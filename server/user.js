@@ -57,6 +57,7 @@ Router.post('/register', function (req, res) {
         })
     })
 });
+
 // 登录接口，查询数据库中是否有用户
 // findOne的第二个参数是忽略查询的字段pwd,__v
 Router.post('/login', function (req, res) {
@@ -78,5 +79,27 @@ function md5Pwd(pwd) {
     return utils.md5(utils.md5(pwd + salt));
 
 }
+
+// bossinfo数据提交的接口
+Router.post('/update', function (req, res) {
+    console.log(req)
+    // 1、获取用户登录的cookies的userid
+    const userid = req.cookies.userid;
+    // 如果用户未登录，返回code：1
+    if (!userid) {
+        return res.json({code: 1})
+    }
+    // 提交的数据
+    const body = req.body;
+    // 查找userid是否存在，跟新body
+    User.findByIdAndUpdate(userid, body, function (err, doc) {
+        // 合并数据
+        const data = Object.assign({}, {
+            user: doc.user,
+            type: doc.type
+        }, body);
+        return res.json({code: 0, data: data});
+    })
+})
 
 module.exports = Router;

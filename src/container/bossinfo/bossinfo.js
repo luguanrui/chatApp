@@ -1,13 +1,20 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 import {NavBar, InputItem, TextareaItem, Button} from 'antd-mobile'
 
 import AvatarSelector from '../../component/avatar-selector/avatar-selector'
+import {update} from '../../redux/user.redux'
 
+@connect(
+    state => state.user,
+    {update}
+)
 class BossInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            avatar:'',
+            avatar: '',
             title: '',
             company: '',
             money: '',
@@ -22,15 +29,22 @@ class BossInfo extends React.Component {
             [key]: val
         })
     }
+
     // 将选中的img的name传入state中的avatar字段中，handleSelect需要绑定this
-    handleSelect(imgName){
+    handleSelect(imgName) {
         this.setState({
-            avatar:imgName
+            avatar: imgName
         })
     }
+
     render() {
+        const path = this.props.location.pathname;
+        const redirect = this.props.redirectTo;
         return (
             <div>
+                {/*路由跳转*/}
+                {redirect && redirect !== path ? <Redirect to={redirect}></Redirect> : null}
+
                 <NavBar mode="dark">BOSS完善信息页面</NavBar>
                 {/*头像选择*/}
                 <AvatarSelector
@@ -61,7 +75,14 @@ class BossInfo extends React.Component {
                     rows={3}
                     autoHeight
                 />
-                <Button type='primary'>保存</Button>
+                <Button
+                    type='primary'
+                    onClick={() => {
+                        this.props.update(this.state)
+                    }}
+                >
+                    保存
+                </Button>
 
             </div>
         )
