@@ -72,6 +72,11 @@ function errorMsg(msg) {
     return {type: ERROR_MSG, msg: msg};
 }
 
+/**
+ * loadData保存用户信息到redux中，将数据给下一个页面使用
+ * @param userinfo
+ * @returns {{type: string, payload: *}}
+ */
 export function loadData(userinfo) {
     return {type: 'LOAD_DATA', payload: userinfo};
 }
