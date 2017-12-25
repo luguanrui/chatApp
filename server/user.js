@@ -32,9 +32,11 @@ Router.get('/info', function (req, res) {
 Router.get('/list', function (req, res) {
     // 清空数据库
     // User.remove({},function (err,doc) {});
+    // const type = req.query.type,get参数就用query来获取
+    const {type} = req.query;
     // 查找数据库所有内容
-    User.find({}, function (err, doc) {
-        return res.json(doc)
+    User.find({type}, function (err, doc) {
+        return res.json({code: 0, data: doc})
     });
 });
 

@@ -4,10 +4,7 @@ import {Switch,Route} from 'react-router-dom'
 import {NavBar, TabBar} from 'antd-mobile'
 
 import NavLinkBar from '../navlink/navlink'
-
-function Boss() {
-    return <h2>Boss首页</h2>
-}
+import Boss from '../../component/boss/boss'
 
 function Genius() {
     return <h2>Genius首页</h2>
@@ -74,7 +71,7 @@ class Dashboard extends React.Component {
                 </NavBar>
 
                 <div style={{marginTop:"45px"}}>
-                    {/*渲染四个路由组件*/}
+                    {/*页面跳转，渲染四个路由组件*/}
                     <Switch>
                         {navList.map(v=>(
                             <Route key={v.path} path={v.path} component={v.component}></Route>
