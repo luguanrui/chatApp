@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Switch,Route} from 'react-router-dom'
 import {NavBar, TabBar} from 'antd-mobile'
 
 import NavLinkBar from '../navlink/navlink'
@@ -66,10 +67,22 @@ class Dashboard extends React.Component {
 
         return (
             <div>
-                <NavBar mode='dard'>
+
+                {/*导航头部*/}
+                <NavBar className='fixed-header' mode='dard'>
                     {navList.find(v => v.path == pathname).title}
                 </NavBar>
-                <h2>content</h2>
+
+                <div style={{marginTop:"45px"}}>
+                    {/*渲染四个路由组件*/}
+                    <Switch>
+                        {navList.map(v=>(
+                            <Route key={v.path} path={v.path} component={v.component}></Route>
+                        ))}
+                    </Switch>
+                </div>
+
+                {/*导航尾部*/}
                 <NavLinkBar data={navList}></NavLinkBar>
             </div>
         )

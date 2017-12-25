@@ -1,8 +1,10 @@
+// 底部导航
 import React from 'react'
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom'
 import {TabBar} from 'antd-mobile'
 
+// 因为该组件不是路由组件，所以使用@witchRouter将location，history，match三个对象传入
 @withRouter
 class NavLinkBar extends React.Component {
 
