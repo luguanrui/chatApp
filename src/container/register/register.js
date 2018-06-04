@@ -29,7 +29,7 @@ class Register extends React.Component {
     }
 
     handleRegister() {
-        // 将this.state传入register()函数中
+        // 传递数据调用接口
         this.props.register(this.state);
     }
 

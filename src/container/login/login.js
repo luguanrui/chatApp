@@ -24,10 +24,12 @@ class Login extends React.Component {
     }
 
     handleRegister() {
+        // 去注册
         this.props.history.push('/register')
     }
 
     handleLogin() {
+        // 传输数据调用登录的接口
         this.props.login(this.state);
     }
 

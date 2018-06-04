@@ -22,13 +22,16 @@ class AvatarSelector extends React.Component {
                 text: v
             }));
 
+        const hasSelectIcon =
+            <div>
+                <span>已选择头像</span>
+                <img src={this.state.icon} alt="" style={{width: 20, verticalAlign: 'top', marginLeft: '10px'}}/>
+            </div>;
+
+        const notHasSelectIcon = <div>请选择头像</div>;
+
         // 已经选择的表格，根据state是否存在text字段判断是否选择了头像
-        const gridHeader = this.state.text ?
-                                            <div>
-                                                <span>已选择头像</span>
-                                                <img src={this.state.icon} alt="" style={{width: 20,verticalAlign:'top',marginLeft:'10px'}}/>
-                                            </div>
-                                            : <div>请选择头像</div>;
+        const gridHeader = this.state.text ? hasSelectIcon : notHasSelectIcon;
         return (
             <div>
                 <List renderHeader={() => gridHeader}>

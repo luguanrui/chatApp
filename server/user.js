@@ -17,6 +17,7 @@ Router.get('/info', function (req, res) {
     if (!userid) {
         return res.json({code: 1})
     }
+    // findOne({查询条件},{返回},callback)
     User.findOne({_id: userid}, _filter, function (err, doc) {
         if (err) {
             return res.json({code: 1, msg: '后端出错了'})
@@ -40,7 +41,12 @@ Router.get('/list', function (req, res) {
     });
 });
 
-// 注册接口,需要引入插件body-parser，专门接受post参数
+/**
+ * 注册接口,需要引入插件body-parser，专门接受post参数
+ * 功能：
+ * 1、查询，验证用户是否已存在
+ * 2、将数据插入数据库
+ */
 Router.post('/register', function (req, res) {
     const {user, pwd, type} = req.body;
     // 查询一条user信息（因为user唯一）
@@ -56,7 +62,7 @@ Router.post('/register', function (req, res) {
             }
             const {user, type, _id} = doc;
             res.cookie('userid', _id);
-            return res.json({code: 0, data: {user}})
+            return res.json({code: 0, data: {user, type, _id}})
         })
     })
 });
@@ -78,7 +84,7 @@ Router.post('/login', function (req, res) {
 
 // md5加盐
 function md5Pwd(pwd) {
-    const salt = 'imooc_is_good_2432342342!@#$%^fsddJJKK';
+    const salt = 'chatApp_GG_55_2432342342!@#$%^fsddJJ~~KK';
     return utils.md5(utils.md5(pwd + salt));
 
 }

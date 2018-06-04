@@ -2,7 +2,6 @@
  * 用户信息redux
  */
 import axios from 'axios';
-
 import {getRedirectPath} from '../util'
 
 // 状态码
@@ -19,10 +18,9 @@ const AUTH_SUCCESS = 'Auth_SUCCESS';
 const initState = {
     redirectTo: '',//用户注册，登录之后跳转到哪个页面
     isAuth: '',// 是否登录
-    msg: '',// 有无报错信息
+    msg: '',// 报错信息
     user: '',// 用户名
-    type: '',// 身份
-    pwd: '' // 密码
+    type: ''// 身份
 };
 
 /**
@@ -69,13 +67,14 @@ export function loadData(userinfo) {
 }
 
 /**
- * register reducer
+ * register
  * @param user
  * @param pwd
  * @param repeatpwd
  * @param type
  * @returns {*}
  */
+
 export function register({user, pwd, repeatpwd, type}) {
     // 注册校验
     if (!user || !pwd || !type) {
@@ -98,7 +97,9 @@ export function register({user, pwd, repeatpwd, type}) {
 }
 
 /**
- * 登录函数，发送ajax请求
+ * 登录
+ * login
+ *
  * @param user
  * @param pwd
  * @returns {*}
@@ -121,6 +122,8 @@ export function login({user, pwd}) {
 
 /**
  * 从bossinfo.js传入的参数state
+ * update action creator
+ *
  * @param data
  */
 export function update(data) {

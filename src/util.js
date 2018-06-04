@@ -8,9 +8,8 @@
  * @returns {string}
  */
 export function getRedirectPath({type, avatar}) {
-    // 根据用户信息，返回跳转地址
-    // user.type:  /boss, /genius
-    // user.avatar: /bossinfo, /geniusinfo
+    // 根据用户类型跳转：user.type:  /boss, /genius
+    // 完善用户信息跳转：user.avatar: /bossinfo, /geniusinfo
     let url = (type === 'boss') ? '/boss' : '/genius';
     if (!avatar) {
         url += 'info';

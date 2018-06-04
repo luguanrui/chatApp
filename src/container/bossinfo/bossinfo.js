@@ -44,46 +44,14 @@ class BossInfo extends React.Component {
             <div>
                 {/*路由跳转*/}
                 {redirect && redirect !== path ? <Redirect to={redirect}></Redirect> : null}
-
                 <NavBar mode="dark">BOSS完善信息页面</NavBar>
                 {/*头像选择*/}
-                <AvatarSelector
-                    selectAvatar={this.handleSelect}
-                />
-
-                <InputItem
-                    onChange={v => this.onChange('title', v)}
-                >
-                    招聘职位
-                </InputItem>
-
-                <InputItem
-                    onChange={v => this.onChange('company', v)}
-                >
-                    公司名称
-                </InputItem>
-
-                <InputItem
-                    onChange={v => this.onChange('money', v)}
-                >
-                    职位薪资
-                </InputItem>
-
-                <TextareaItem
-                    onChange={v => this.onChange('desc', v)}
-                    title="职位要求"
-                    rows={3}
-                    autoHeight
-                />
-                <Button
-                    type='primary'
-                    onClick={() => {
-                        this.props.update(this.state)
-                    }}
-                >
-                    保存
-                </Button>
-
+                <AvatarSelector selectAvatar={this.handleSelect}/>
+                <InputItem onChange={v => this.onChange('title', v)}>招聘职位</InputItem>
+                <InputItem onChange={v => this.onChange('company', v)}>公司名称</InputItem>
+                <InputItem onChange={v => this.onChange('money', v)}>职位薪资</InputItem>
+                <TextareaItem onChange={v => this.onChange('desc', v)} title="职位要求" rows={3} autoHeight/>
+                <Button type='primary' onClick={() => {this.props.update(this.state)}}>保存</Button>
             </div>
         )
     }
