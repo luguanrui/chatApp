@@ -15,11 +15,14 @@ import {loadData} from '../../redux/user.redux'
 )
 class AuthRoute extends React.Component {
     componentDidMount() {
+        // 如果是路由地址是login，register的话，则不需要获取用户信息
         const publicList = ['/login', '/register'];
         const pathname = this.props.location.pathname;
         if (publicList.indexOf(pathname) > -1) {
             return null;
         }
+
+        // 获取用户信息
         axios.get('/user/info')
             .then(res => {
                 if (res.status === 200) {
@@ -36,7 +39,6 @@ class AuthRoute extends React.Component {
 
         // 是否登录
         // 现在的url地址，login是不需要跳转的
-
         // 用户的type，身份是boss还是牛人
         // 用户是否完善信息（选择头像，个人简介）
     }

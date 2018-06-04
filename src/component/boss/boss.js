@@ -1,34 +1,36 @@
 import React from 'react'
 import axios from 'axios'
-import {Card,WhiteSpace,WingBlank} from 'antd-mobile'
+import {Card, WhiteSpace, WingBlank} from 'antd-mobile'
 
 
-class Boss extends React.Component{
-    constructor(props){
+class Boss extends React.Component {
+    constructor(props) {
         super(props);
-        this.state={
-            data:[]
+        this.state = {
+            data: []
         }
 
     }
-    componentDidMount(){
+
+    componentDidMount() {
+        // 获取数据
         axios.get('/user/list?type=genius')
-            .then(res=>{
-                if (res.data.code === 0){
-                    this.setState({data:res.data.data})
+            .then(res => {
+                if (res.data.code === 0) {
+                    this.setState({data: res.data.data})
                 }
             })
     }
-    render(){
-        console.log(this.state.data)
+
+    render() {
         const Header = Card.Header;
         const Body = Card.Body;
         return (
             <WingBlank>
                 <WhiteSpace></WhiteSpace>
-                {this.state.data.map(v=>(
+                {this.state.data.map(v => (
                     // 如果用户没有头像就不显示
-                    v.avatar?
+                    v.avatar ?
                         (<Card key={v._id}>
                             <Header
                                 title={v.user}
@@ -37,11 +39,11 @@ class Boss extends React.Component{
                             >
 
                             </Header>
-                            <Body>{v.desc.split('\n').map(v=>(
+                            <Body>{v.desc.split('\n').map(v => (
                                 <div key={v}>{v}</div>
                             ))}</Body>
                         </Card>)
-                        :null
+                        : null
                 ))}
             </WingBlank>
         )

@@ -45,6 +45,7 @@ Router.post('/register', function (req, res) {
     const {user, pwd, type} = req.body;
     // 查询一条user信息（因为user唯一）
     User.findOne({user: user}, function (err, doc) {
+        // 检查用户是否已存在
         if (doc) {
             return res.json({code: 1, msg: '用户名重复'})
         }
