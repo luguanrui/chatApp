@@ -22,9 +22,6 @@ function User() {
     state => state
 )
 class Dashboard extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         const user = this.props.user;
@@ -71,9 +68,11 @@ class Dashboard extends React.Component {
                 <div style={{marginTop: "20px"}}>
                     {/*页面跳转，渲染四个路由组件*/}
                     <Switch>
-                        {navList.map(v => (
-                            <Route key={v.path} path={v.path} component={v.component}></Route>
-                        ))}
+                        {
+                            navList.map(
+                                v => (<Route key={v.path} path={v.path} component={v.component}></Route>)
+                            )
+                        }
                     </Switch>
                 </div>
                 {/*导航尾部*/}
