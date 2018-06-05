@@ -1,25 +1,15 @@
 import React from 'react'
-import axios from 'axios'
+import {connect} from 'react-redux'
+import {getUserList} from '../../redux/chatuser.redux'
 import {Card, WhiteSpace, WingBlank} from 'antd-mobile'
 
-
+@connect(
+    state => state.chatUser,
+    {getUserList}
+)
 class Boss extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: []
-        }
-
-    }
-
     componentDidMount() {
-        // 获取数据
-        axios.get('/user/list?type=genius')
-            .then(res => {
-                if (res.data.code === 0) {
-                    this.setState({data: res.data.data})
-                }
-            })
+        this.props.getUserList('genius');
     }
 
     render() {
@@ -27,22 +17,28 @@ class Boss extends React.Component {
         const Body = Card.Body;
         return (
             <WingBlank>
-                <WhiteSpace></WhiteSpace>
-                {this.state.data.map(v => (
+                {this.props.userList.map(v => (
                     // 如果用户没有头像就不显示
                     v.avatar ?
-                        (<Card key={v._id}>
-                            <Header
-                                title={v.user}
-                                thumb={require(`../../img/${v.avatar}.png`)}
-                                extra={<span>{v.title}</span>}
-                            >
-
-                            </Header>
-                            <Body>{v.desc.split('\n').map(v => (
-                                <div key={v}>{v}</div>
-                            ))}</Body>
-                        </Card>)
+                        <div key={v._id}>
+                            <WhiteSpace></WhiteSpace>
+                            <Card>
+                                <Header
+                                    title={v.user}
+                                    thumb={require(`../../img/${v.avatar}.png`)}
+                                    extra={<span>{v.title}</span>}
+                                >
+                                </Header>
+                                <Body>
+                                {
+                                    // 换行
+                                    v.desc.split('\n').map(v => (
+                                        <div key={v}>{v}</div>
+                                    ))
+                                }
+                                </Body>
+                            </Card>
+                        </div>
                         : null
                 ))}
             </WingBlank>

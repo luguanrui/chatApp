@@ -36,7 +36,7 @@ Router.get('/list', function (req, res) {
     // const type = req.query.type,get参数就用query来获取
     const {type} = req.query;
     // 查找数据库所有内容
-    User.find({type}, function (err, doc) {
+    User.find({type}, _filter,function (err, doc) {
         return res.json({code: 0, data: doc})
     });
 });

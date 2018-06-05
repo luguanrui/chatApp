@@ -5,11 +5,9 @@ import axios from 'axios';
 import {getRedirectPath} from '../util'
 
 // 状态码
-// const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-// const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+const AUTH_SUCCESS = 'AUTH_SUCCESS'; // 登录，注册，更新数据统一
 const ERROR_MSG = 'ERROR_MSG';
 const LOAD_DATA = 'LOAD_DATA';
-const AUTH_SUCCESS = 'Auth_SUCCESS';
 
 /**
  * 用户初始化信息
@@ -17,7 +15,6 @@ const AUTH_SUCCESS = 'Auth_SUCCESS';
  */
 const initState = {
     redirectTo: '',//用户注册，登录之后跳转到哪个页面
-    isAuth: '',// 是否登录
     msg: '',// 报错信息
     user: '',// 用户名
     type: ''// 身份
@@ -32,7 +29,7 @@ const initState = {
 export function user(state = initState, action) {
     switch (action.type) {
         case AUTH_SUCCESS:
-            return {...state, msg: '', ...action.payload, redirectTo: getRedirectPath(action.payload)};
+            return {...state, msg: '', redirectTo: getRedirectPath(action.payload), ...action.payload};
         case ERROR_MSG:
             return {...state, msg: action.msg, isAuth: false};
         case LOAD_DATA:
@@ -43,9 +40,9 @@ export function user(state = initState, action) {
 }
 
 function authSuccess(obj) {
-    // 过滤掉pwd字段
+    // 过滤掉redux中的pwd字段
     const {pwd, ...data} = obj;
-    return {type: AUTH_SUCCESS, payload: data}
+    return {type: AUTH_SUCCESS, payload: data};
 }
 
 /**
@@ -54,7 +51,7 @@ function authSuccess(obj) {
  * @returns {{type: string, msg: *}}
  */
 function errorMsg(msg) {
-    return {msg, type: ERROR_MSG,};
+    return {msg, type: ERROR_MSG};
 }
 
 /**
@@ -114,16 +111,14 @@ export function login({user, pwd}) {
                 if (res.status === 200 && res.data.code === 0) {
                     dispatch(authSuccess(res.data.data));
                 } else {
-                    dispatch(errorMsg(res.data.msg))
+                    dispatch(errorMsg(res.data.msg));
                 }
             })
     }
 }
 
 /**
- * 从bossinfo.js传入的参数state
- * update action creator
- *
+ * update更新数据
  * @param data
  */
 export function update(data) {
@@ -133,7 +128,7 @@ export function update(data) {
                 if (res.status === 200 && res.data.code === 0) {
                     dispatch(authSuccess(res.data.data));
                 } else {
-                    dispatch(errorMsg(res.data.msg))
+                    dispatch(errorMsg(res.data.msg));
                 }
             })
     }

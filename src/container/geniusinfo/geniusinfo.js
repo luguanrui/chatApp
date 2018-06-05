@@ -42,34 +42,12 @@ class GeniusInfo extends React.Component {
             <div>
                 {/*路由跳转*/}
                 {redirect && redirect !== path ? <Redirect to={redirect}></Redirect> : null}
-
                 <NavBar mode="dark">牛人完善信息页面</NavBar>
                 {/*头像选择*/}
-                <AvatarSelector
-                    selectAvatar={this.handleSelect}
-                />
-
-                <InputItem
-                    onChange={v => this.onChange('title', v)}
-                >
-                    求职岗位
-                </InputItem>
-
-                <TextareaItem
-                    onChange={v => this.onChange('desc', v)}
-                    title="个人简介"
-                    rows={3}
-                    autoHeight
-                />
-                <Button
-                    type='primary'
-                    onClick={() => {
-                        this.props.update(this.state)
-                    }}
-                >
-                    保存
-                </Button>
-
+                <AvatarSelector selectAvatar={this.handleSelect}/>
+                <InputItem onChange={v => this.onChange('title', v)}>求职岗位</InputItem>
+                <TextareaItem onChange={v => this.onChange('desc', v)} title="个人简介" rows={3} autoHeight/>
+                <Button type='primary' onClick={() => {this.props.update(this.state)}}>保存</Button>
             </div>
         )
     }

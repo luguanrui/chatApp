@@ -14,7 +14,7 @@ class NavLinkBar extends React.Component {
     };
 
     render() {
-        // 过滤掉hide为true的数据
+        // 过滤掉hide为true的数据，保留已经隐藏的数据
         const navList = this.props.data.filter(v => !v.hide);
         // 获取pathname
         const {pathname} = this.props.location;
