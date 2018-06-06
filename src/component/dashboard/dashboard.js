@@ -6,13 +6,10 @@ import {NavBar} from 'antd-mobile'
 import NavLinkBar from '../navlink/navlink'
 import Boss from '../../component/boss/boss'
 import Genius from '../../component/genius/genius'
+import User from '../../component/user/user'
 
 function Msg() {
     return <h2>消息首页</h2>
-}
-
-function User() {
-    return <h2>个人中心</h2>
 }
 
 @connect(
@@ -62,7 +59,7 @@ class Dashboard extends React.Component {
                 <NavBar className='fixed-header' mode='dard'>
                     {navList.find(v => v.path === pathname).title}
                 </NavBar>
-                <div style={{marginTop: "20px"}}>
+                <div>
                     {/*页面跳转，渲染四个路由组件*/}
                     <Switch>
                         {

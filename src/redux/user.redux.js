@@ -8,6 +8,7 @@ import {getRedirectPath} from '../util'
 const AUTH_SUCCESS = 'AUTH_SUCCESS'; // 登录，注册，更新数据统一
 const ERROR_MSG = 'ERROR_MSG';
 const LOAD_DATA = 'LOAD_DATA';
+const LOGOUT = 'LOGOUT';
 
 /**
  * 用户初始化信息
@@ -34,6 +35,8 @@ export function user(state = initState, action) {
             return {...state, msg: action.msg};
         case LOAD_DATA:
             return {...state, ...action.payload};
+        case LOGOUT:
+            return {...initState, redirectTo: '/login'};
         default:
             return state;
     }
@@ -61,6 +64,11 @@ function errorMsg(msg) {
  */
 export function loadData(userinfo) {
     return {type: 'LOAD_DATA', payload: userinfo};
+}
+
+// 路由跳转
+export function logoutSubmit() {
+    return {type: LOGOUT}
 }
 
 /**
