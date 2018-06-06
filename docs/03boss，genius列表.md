@@ -67,6 +67,8 @@ src/component/dashboard/dashboard.js：登录成功之后所有的页面都归da
 	
 1、导航头部
 
+	const {pathname} = this.props.location;
+	
 	<NavBar className='fixed-header' mode='dard'>
 	    {navList.find(v => v.path === pathname).title}
 	</NavBar>	
@@ -96,7 +98,7 @@ src/component/dashboard/dashboard.js：登录成功之后所有的页面都归da
 	@withRouter
 	class NavLinkBar extends React.Component {
 	
-	    // 组件传递参数校验
+	    // 组件传递参数校验，使用static关键字创建属于该类的属性和方法
 	    static propTypes = {
 	        data: PropTypes.array.isRequired
 	    };
@@ -244,6 +246,150 @@ redux/chatuser.redux.js
 	            })
 	    }
 	}
+	
+	
+## 优化
+
+由于boss和列表和genius列表内容差不多，所以会出现代码重复的情况，因此需要抽离组件usercard
+
+### usercard	
+
+可能会出现的重复代码
+	
+	<WingBlank>
+	    {this.props.userList.map(v => (
+	        // 如果用户没有头像就不显示
+	        v.avatar ?
+	            <div key={v._id}>
+	                <WhiteSpace></WhiteSpace>
+	                <Card>
+	                    <Header
+	                        title={v.user}
+	                        thumb={require(`../../img/${v.avatar}.png`)}
+	                        extra={<span>{v.title}</span>}
+	                    >
+	                    </Header>
+	                    <Body>
+	                    {
+	                        // 换行
+	                        v.desc.split('\n').map(v => (
+	                            <div key={v}>{v}</div>
+	                        ))
+	                    }
+	                    </Body>
+	                </Card>
+	            </div>
+	            : null
+	    ))}
+	</WingBlank>
+
+component/usercard/usercard.js
+
+	import React from 'react'
+	import PropTypes from 'prop-types'
+	import {Card, WhiteSpace, WingBlank} from 'antd-mobile'
+	
+	class UserCard extends React.Component {
+	
+	    static propTypes = {
+	        userList: PropTypes.array.isRequired
+	    }
+	
+	    render() {
+	        const Header = Card.Header;
+	        const Body = Card.Body;
+	        return (
+	            <WingBlank>
+	                {this.props.userList.map(v => (
+	                    // 如果用户没有头像就不显示
+	                    v.avatar ?
+	                        <div key={v._id}>
+	                            <WhiteSpace></WhiteSpace>
+	                            <Card>
+	                                <Header
+	                                    title={v.user}
+	                                    thumb={require(`../../img/${v.avatar}.png`)}
+	                                    extra={<span>{v.title}</span>}
+	                                >
+	                                </Header>
+	                                <Body>
+	                                {
+	                                    // 企业登录显示招聘的公司名
+	                                    v.type === 'boss' ? <div>公司：{v.company}</div> : null
+	                                }
+	                                {
+	                                    // 换行
+	                                    v.desc.split('\n').map(d => (<div key={d}>{d}</div>))
+	                                }
+	                                {
+	                                    // 企业登录显示招聘的薪资
+	                                    v.type === 'boss' ? <div>薪资：{v.money}</div> : null
+	                                }
+	                                </Body>
+	                            </Card>
+	                        </div>
+	                        : null
+	                ))}
+	            </WingBlank>
+	        )
+	    }
+	}
+	
+	export default UserCard
+	
+	
+component/boss/boss.js
+
+	import React from 'react'
+	import {connect} from 'react-redux'
+	import {getUserList} from '../../redux/chatuser.redux'
+	import UserCard from '../usercard/usercard'
+	
+	@connect(
+	    state => state.chatUser,
+	    {getUserList}
+	)
+	class Boss extends React.Component {
+	    componentDidMount() {
+	        this.props.getUserList('genius');
+	    }
+	
+	    render() {
+	        return <UserCard userList={this.props.userList}/>
+	    }
+	}
+	
+	export default Boss
+
+component/genius/genius.js
+
+	import React from 'react'
+	import {connect} from 'react-redux'
+	import {getUserList} from '../../redux/chatuser.redux'
+	import UserCard from '../usercard/usercard'
+	
+	@connect(
+	    state => state.chatUser,
+	    {getUserList}
+	)
+	class Genius extends React.Component {
+	    componentDidMount() {
+	        this.props.getUserList('boss');
+	    }
+	
+	    render() {
+	
+	        return <UserCard userList={this.props.userList}/>
+	    }
+	
+	}
+	
+	export default Genius
+		
+
+
+
+	
 
 
 

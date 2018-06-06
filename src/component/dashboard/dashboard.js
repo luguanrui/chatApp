@@ -5,10 +5,7 @@ import {NavBar} from 'antd-mobile'
 
 import NavLinkBar from '../navlink/navlink'
 import Boss from '../../component/boss/boss'
-
-function Genius() {
-    return <h2>Genius首页</h2>
-}
+import Genius from '../../component/genius/genius'
 
 function Msg() {
     return <h2>消息首页</h2>
