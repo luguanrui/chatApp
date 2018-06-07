@@ -1,3 +1,4 @@
+// 由boss,genius组件抽离出来的组件，显示boss个genius列表
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Card, WhiteSpace, WingBlank} from 'antd-mobile'

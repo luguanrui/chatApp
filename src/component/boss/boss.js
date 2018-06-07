@@ -1,3 +1,4 @@
+// BOSS显示牛人列表
 import React from 'react'
 import {connect} from 'react-redux'
 import {getUserList} from '../../redux/chatuser.redux'

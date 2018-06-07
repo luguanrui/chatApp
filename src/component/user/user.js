@@ -1,3 +1,4 @@
+// 个人中心
 import React from 'react'
 import {connect} from 'react-redux'
 import {Result, List, WhiteSpace, Modal} from 'antd-mobile'
@@ -19,7 +20,6 @@ class User extends React.Component {
     }
 
     handleLogout() {
-        console.log('退出');
         const alert = Modal.alert;
         alert('注销', '确定退出登录？', [
             {text: '否', onPress: () => console.log('取消退出登录')},

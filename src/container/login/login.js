@@ -5,20 +5,21 @@ import {List, InputItem, WingBlank, WhiteSpace, Button} from 'antd-mobile'
 
 import Logo from '../../component/logo/logo'
 import {login} from '../../redux/user.redux'
-
+import chatForm from '../../component/chat-form/chat-form' // 高阶组件
 
 @connect(
     state => state.user,
     {login}
 )
+@chatForm
 class Login extends React.Component {
     constructor(props) {
         super(props);
         // 初始化状态
-        this.state = {
-            user: '',
-            pwd: ''
-        };
+        // this.state = {
+        //     user: '',
+        //     pwd: ''
+        // };
         this.handleRegister = this.handleRegister.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
     }
@@ -30,7 +31,8 @@ class Login extends React.Component {
 
     handleLogin() {
         // 传输数据调用登录的接口
-        this.props.login(this.state);
+        // this.props.login(this.state);
+        this.props.login(this.props.state);
     }
 
     /**
@@ -38,21 +40,18 @@ class Login extends React.Component {
      * @param key
      * @param val
      */
-    handleChange(key, val) {
-        this.setState({
-            [key]: val
-        });
-
-        // setTimeout(() => {
-        //     console.log(this.state)
-        // }, 0)
-    }
+    // handleChange(key, val) {
+    //     this.setState({
+    //         [key]: val
+    //     });
+    // }
 
     render() {
         return (
             <div>
                 {/*路由跳转*/}
-                {this.props.redirectTo && this.props.redirectTo !== '/login' ? <Redirect to={this.props.redirectTo}/> : null}
+                {this.props.redirectTo && this.props.redirectTo !== '/login' ?
+                    <Redirect to={this.props.redirectTo}/> : null}
                 <Logo></Logo>
                 <WingBlank>
                     {/*登录失败信息提示*/}
@@ -61,13 +60,17 @@ class Login extends React.Component {
                         <InputItem
                             placeholder="请输入用户名"
                             clear
-                            onChange={v => {this.handleChange('user', v)}}>用户名</InputItem>
+                            onChange={v => {
+                                this.props.handleChange('user', v)
+                            }}>用户名</InputItem>
 
                         <InputItem
                             type='password'
                             placeholder="请输入您的密码"
                             clear
-                            onChange={v => {this.handleChange('pwd', v)}}>密码</InputItem>
+                            onChange={v => {
+                                this.props.handleChange('pwd', v)
+                            }}>密码</InputItem>
                     </List>
                     <WhiteSpace/>
                     <Button type='primary' onClick={this.handleLogin}>登录</Button>
