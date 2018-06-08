@@ -6,6 +6,7 @@ const model = require('./model');
 
 // 获取模型
 const User = model.getModel('user');
+const Chat = model.getModel('chat');
 
 // 过滤掉返回的pwd
 const _filter = {'pwd': 0, '__v': 0};
@@ -36,7 +37,7 @@ Router.get('/list', function (req, res) {
     // const type = req.query.type,get参数就用query来获取
     const {type} = req.query;
     // 查找数据库所有内容
-    User.find({type}, _filter,function (err, doc) {
+    User.find({type}, _filter, function (err, doc) {
         return res.json({code: 0, data: doc})
     });
 });
@@ -107,6 +108,18 @@ Router.post('/update', function (req, res) {
             type: doc.type
         }, body);
         return res.json({code: 0, data: data});
+    })
+})
+
+// 获取用户聊天记录
+Router.get('/getmsglist', function (req, res) {
+    const user = req.cookies.user;
+    //  {'$or': [{from: user, to: user}]}
+    Chat.find({}, function (err, doc) {
+        if (!err) {
+            return res.json({code: 0, msgs: doc})
+        }
+
     })
 })
 

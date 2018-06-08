@@ -193,7 +193,97 @@ src/component/chat/chat.js
 	}
 	
 	export default Chat	
+		
 			    
-	
+## 使用redux管理聊天记录
 
+### 新增数据库字段
+
+src/server/model.js
+
+	// 定义模型models，用户批量生成模型
+	const models = {
+	    // 用户
+	    ...
+	    // 聊天信息
+	    chat: {
+	        'chatid': {type: String, require: true},// 每条信息的id
+	        'from': {type: String, require: true}, // 每条信息来源
+	        'read': {type: Boolean, default: false}, // 信息是否已读
+	        'to': {type: String, require: true}, // 每条信息去向
+	        'content': {type: String, require: true, default: ''}, // 每条信息的内容
+	        'create_time': {type: Number, default: new Date().getTime()}// 每条信息创建的时间
+	    }
+	};
+	
+### 后台接口设计
+
+src/server/user.js
+
+	const Chat = model.getModel('chat');
+	// 获取用户聊天记录
+	Router.get('/getmsglist', function (req, res) {
+	    const user = req.cookies.user;
+	    //  {'$or': [{from: user, to: user}]}
+	    Chat.find({}, function (err, doc) {
+	        if (!err) {
+	            return res.json({code: 0, msgs: doc})
+	        }
+	
+	    })
+	})
+
+### redux设计
+
+src/redux/chat.redux.js
+
+	import axios from 'axios'
+	import io from 'socket.io-client'
+	
+	const socket = io('ws://localhost:9093')
+	
+	// 获取聊天列表
+	const MSG_LIST = 'MSG_LIST'
+	// 读取信息
+	const MSG_RECV = 'MSG_RECV'
+	// 标记已读
+	const MSG_READ = 'MSG_READ'
+	
+	const initState = {
+	    chatmsg: [],
+	    unread: 0
+	}
+	
+	// reducer
+	export function chat(state = initState, action) {
+	    switch (action.type) {
+	        case MSG_LIST:
+	            return {...state, chatmsg: action.payload, unread: action.payload.filter(v => !v.read).length}
+	        case MSG_RECV:
+	            return state
+	        case MSG_READ:
+	            return state
+	        default:
+	            return state
+	    }
+	}
+	
+	// action creator
+	function msgList(msgs) {
+	    return {type: MSG_LIST, payload: msgs}
+	}
+	// dispatch action
+	export function getMsgList() {
+	    return dispatch => {
+	        axios.get('/user/getmsglist').then(res => {
+	            if (res.state === 200 && res.code === 0) {
+	                dispatch(msgList(res.data.msgs))
+	            }
+	        })
+	    }
+	}
+
+
+
+	
 	

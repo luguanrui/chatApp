@@ -24,7 +24,14 @@ const models = {
         'money': {type: String} // 开出的工资
     },
     // 聊天信息
-    chat: {}
+    chat: {
+        'chatid': {type: String, require: true},// 每条信息的id
+        'from': {type: String, require: true}, // 每条信息来源
+        'read': {type: Boolean, default: false}, // 信息是否已读
+        'to': {type: String, require: true}, // 每条信息去向
+        'content': {type: String, require: true, default: ''}, // 每条信息的内容
+        'create_time': {type: Number, default: new Date().getTime()}// 每条信息创建的时间
+    }
 };
 
 // 循环models，批量生成模型，实例化document对象

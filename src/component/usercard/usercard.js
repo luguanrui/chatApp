@@ -13,7 +13,7 @@ class UserCard extends React.Component {
 
     handleClick(v) {
         // 主要实现点击Card路由跳转，带参数
-        this.props.history.push(`/chat/${v.user}`)
+        this.props.history.push(`/chat/${v._id}`)
     }
 
     render() {
