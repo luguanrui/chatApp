@@ -50,7 +50,7 @@ class Chat extends React.Component {
     }
 
     render() {
-        const emoji = '😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 😗 😙 😚 🙂 🤗 🤩 🤔 🤨'
+        const emoji = '😄 😃 😀 😊 ☺ 😉 😍 😘 😚 😗 😙 😜 😝 😛 😳 😁 😔 😌 😒 😞 😣 😢 😂 😭 😪 😥 😰 😅 😓 😩 😫 😨 😱 😠 😡 😤 😖 😆 😋 😷 😎 😴 😵 😲 😟 😦 😧 😈 👿 😮 😬 😐 😕 😯 😶 😇 😏 😑 👲 👳 👮 👷 💂 👶 👦 👧 👨 👩 👴 👵 👱 👼 👸 😺 😸 😻 😽 😼 🙀 😿 😹 😾 👹 👺 🙈 🙉 🙊 💀 👽 💩 🔥 ✨ 🌟 💫 💥 💢 💦 💧 💤 💨 👂 👀 👃 👅 👄 👍 👎 👌 👊 ✊ ✌ 👋 ✋ 👐 👆 👇 👉 👈 🙌 🙏 ☝ 👏 💪 🚶 🏃 💃 👫 👪 👬 👭 💏 💑 👯 🙆 🙅 💁 🙋 💆 💇 💅 👰 🙎'
             .split(' ')
             .filter(v => v)
             .map(v => ({text: v}))
@@ -104,8 +104,13 @@ class Chat extends React.Component {
                             }}
                             extra={
                                 <div>
-                                    <span style={{marginRight: 10}} onClick={()=>{this.setState({showEmoji: !this.state.showEmoji}); this.fixCarousel()}}>😀</span>
-                                    <span onClick={() => {this.handleSubmit()}}>发送</span>
+                                    <span style={{marginRight: 10}} onClick={() => {
+                                        this.setState({showEmoji: !this.state.showEmoji});
+                                        this.fixCarousel()
+                                    }}>😀</span>
+                                    <span onClick={() => {
+                                        this.handleSubmit()
+                                    }}>发送</span>
                                 </div>
                             }
                         >
@@ -115,13 +120,13 @@ class Chat extends React.Component {
                         this.state.showEmoji ? (
                             <Grid
                                 data={emoji}
-                                columnNum={6}
-                                carouselMaxRow={2}
+                                columnNum={8}
+                                carouselMaxRow={4}
                                 isCarousel={true}
-                                onClick={el=>{
+                                onClick={el => {
                                     // console.log(el)
                                     this.setState({
-                                        text: this.state.text+el.text
+                                        text: this.state.text + el.text
                                     })
                                 }}
                             />
