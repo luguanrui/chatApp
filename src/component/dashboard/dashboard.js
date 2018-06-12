@@ -2,7 +2,6 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Switch, Route} from 'react-router-dom'
 import {NavBar} from 'antd-mobile'
-
 import NavLinkBar from '../navlink/navlink'
 import Boss from '../../component/boss/boss'
 import Genius from '../../component/genius/genius'
@@ -27,8 +26,8 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        const user = this.props.user;
-        const {pathname} = this.props.location;
+        const user = this.props.user
+        const {pathname} = this.props.location
         // 该数组包含页面的名字，跳转的连接，显示的文字
         const navList = [
             {

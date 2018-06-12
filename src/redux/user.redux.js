@@ -1,5 +1,7 @@
 /**
- * 用户信息redux
+ * 登录注册用户信息redux
+ * 需求:登录，注册，完善信息
+ *
  */
 import axios from 'axios';
 import {getRedirectPath} from '../util'

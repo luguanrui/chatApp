@@ -1,3 +1,8 @@
+/**
+ * 用户列表redux
+ * 1、获取boss列表
+ * 2、获取genius列表
+ */
 import axios from 'axios'
 
 const USER_LIST = 'USER_LIST'

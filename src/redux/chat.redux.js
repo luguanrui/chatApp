@@ -1,3 +1,10 @@
+/**
+ * 聊天redux
+ *
+ * 1、获取聊天记录，
+ * 2、读取聊天信息，
+ * 3、标记消息是否已读
+ */
 import axios from 'axios'
 import io from 'socket.io-client'
 
