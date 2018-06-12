@@ -19,6 +19,10 @@
     padding: 45px 5px;
 }
 
+#chat-page {
+    margin-bottom: 44px;
+}
+
 #chat-page .chat-me .am-list-extra {
     flex-basis: auto;
 }
@@ -28,8 +32,16 @@
     text-align: right;
 }
 
+#chat-page .am-grid-icon {
+    display: none;
+}
+
+#chat-page .am-grid-text {
+    text-align: center;
+}
+
 .stick-footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     z-index: 10;

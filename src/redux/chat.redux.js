@@ -12,6 +12,7 @@ const MSG_READ = 'MSG_READ'
 
 const initState = {
     chatmsg: [],
+    users: {},
     unread: 0
 }
 
@@ -19,9 +20,19 @@ const initState = {
 export function chat(state = initState, action) {
     switch (action.type) {
         case MSG_LIST:
-            return {...state, chatmsg: action.payload, unread: action.payload.filter(v => !v.read).length}
+            return {
+                ...state,
+                users: action.payload.users,
+                chatmsg: action.payload.msgs,
+                unread: action.payload.msgs.filter(v => !v.read && v.to === action.payload.userid).length
+            }
         case MSG_RECV:
-            return {...state, chatmsg: [...state.chatmsg, action.payload]}
+            const n = action.payload.to === action.userid ? 1 : 0
+            return {
+                ...state,
+                chatmsg: [...state.chatmsg, action.payload],
+                unread: state.unread + n
+            }
         case MSG_READ:
             return state
         default:
@@ -30,42 +41,50 @@ export function chat(state = initState, action) {
 }
 
 // action creator
-function msgList(msgs) {
-    return {type: MSG_LIST, payload: msgs}
+function msgList(msgs, users, userid) {
+    return {type: MSG_LIST, payload: {msgs, users, userid}}
 }
 
-function msgRecv(msg) {
-    return {type: MSG_RECV, payload: msg}
+function msgRecv(msg, userid) {
+    return {userid, type: MSG_RECV, payload: msg}
 }
 
 function msgRead(data) {
     return {type: MSG_READ, payload: data}
 }
 
-// dispatch action
+/**
+ * dispatch action
+ * 参数dispatch,getState都是函数
+ * @returns {function(*, *)}
+ */
 export function getMsgList() {
-    return dispatch => {
+    return (dispatch, getState) => {
         axios.get('/user/getmsglist').then(res => {
-            if (res.state === 200 && res.code === 0) {
-                dispatch(msgList(res.data.msgs))
+            if (res.status === 200 && res.data.code === 0) {
+                // 获取当前登录用户的id
+                const userid = getState().user._id
+                dispatch(msgList(res.data.msgs, res.data.users, userid))
             }
         })
     }
 }
 
-// sendmsg to admin
+// sendmsg，将数据发送给后台
 export function sendMsg(from, to, msg) {
     return () => {
         socket.emit('sendmsg', {from, to, msg})
     }
 }
 
-// dispatch action
+// recvmsg，接受后台的数据
 export function recvMsg() {
-    return dispatch => {
+    return (dispatch, getState) => {
         socket.on('recvmsg', function (data) {
-            console.log('recvmsg')
-            dispatch(msgRecv(data))
+            // console.log('recvmsg')
+            // 获取当前登录用户的id
+            const userid = getState().user._id
+            dispatch(msgRecv(data, userid))
         })
     }
 }

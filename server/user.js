@@ -7,6 +7,8 @@ const model = require('./model');
 // 获取模型
 const User = model.getModel('user');
 const Chat = model.getModel('chat');
+// 清空chat数据
+// Chat.remove({},function (err,doc) {})
 
 // 过滤掉返回的pwd
 const _filter = {'pwd': 0, '__v': 0};
@@ -32,7 +34,7 @@ Router.get('/info', function (req, res) {
 
 // 查询用户列表,/user/list
 Router.get('/list', function (req, res) {
-    // 清空数据库
+    // 清空数据库list
     // User.remove({},function (err,doc) {});
     // const type = req.query.type,get参数就用query来获取
     const {type} = req.query;
@@ -113,13 +115,21 @@ Router.post('/update', function (req, res) {
 
 // 获取用户聊天记录
 Router.get('/getmsglist', function (req, res) {
-    const user = req.cookies.user;
-    //  {'$or': [{from: user, to: user}]}
-    Chat.find({}, function (err, doc) {
-        if (!err) {
-            return res.json({code: 0, msgs: doc})
-        }
+    const user = req.cookies.userid;
+    // 查询用户信息，返回user和头像
+    User.find({}, function (e, userdoc) {
+        let users = {}
+        userdoc.forEach(v => {
+            users[v._id] = {name: v.user, avatar: v.avatar}
+        })
 
+        // 查询聊天信息
+        // {'$or': [{from: user}, {to: user}]}
+        Chat.find({'$or': [{from: user}, {to: user}]}, function (err, doc) {
+            if (!err) {
+                return res.json({code: 0, msgs: doc, users: users})
+            }
+        })
     })
 })
 

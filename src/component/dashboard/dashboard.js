@@ -7,15 +7,28 @@ import NavLinkBar from '../navlink/navlink'
 import Boss from '../../component/boss/boss'
 import Genius from '../../component/genius/genius'
 import User from '../../component/user/user'
+import {getMsgList, recvMsg} from '../../redux/chat.redux'
+
 
 function Msg() {
     return <h2>消息首页</h2>
 }
 
+// 获取用户信息getMsgList
 @connect(
-    state => state
+    state => state,
+    {getMsgList, recvMsg}
 )
 class Dashboard extends React.Component {
+
+    // 获取聊天信息和接收聊天信息
+    componentDidMount() {
+        // 防止页面切换多次绑定socket，数据被污染
+        if (!this.props.chat.chatmsg.length) {
+            this.props.getMsgList()
+            this.props.recvMsg()
+        }
+    }
 
     render() {
         const user = this.props.user;

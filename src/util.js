@@ -16,3 +16,13 @@ export function getRedirectPath({type, avatar}) {
     }
     return url;
 }
+
+/**
+ * 数据过滤
+ * @param userId
+ * @param targetId
+ * @returns {string}
+ */
+export function getChatId(userId, targetId) {
+    return [userId, targetId].sort().join('_')
+}

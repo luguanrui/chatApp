@@ -3,9 +3,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom'
 import {TabBar} from 'antd-mobile'
+import {connect} from 'react-redux'
 
 // 因为该组件不是路由组件，所以使用@witchRouter将location，history，match三个对象传入
 @withRouter
+@connect(
+    state => state.chat
+)
+
 class NavLinkBar extends React.Component {
 
     // 组件传递参数校验
@@ -22,6 +27,7 @@ class NavLinkBar extends React.Component {
             <TabBar>
                 {navList.map(v => (
                     <TabBar.Item
+                        badge={v.path === '/msg' ? this.props.unread : 0} // 未读消息state.chat
                         key={v.path}
                         title={v.text}
                         icon={{uri: require(`./img/${v.icon}.png`)}}
