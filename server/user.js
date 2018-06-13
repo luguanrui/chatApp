@@ -116,13 +116,23 @@ Router.post('/update', function (req, res) {
 // 获取用户聊天记录
 Router.get('/getmsglist', function (req, res) {
     const user = req.cookies.userid;
-    // 查询用户信息，返回user和头像
+
+    // 查询用户信息，返回name和头像
+    /**
+     * users的数据格式
+     {
+       '5b17a12b84bf8c1c085d78ce': { name: 'jack', avatar: 'boy' },
+       '5b17a18184bf8c1c085d78cf': { name: 'boss', avatar: 'man' },
+       '5b17a1c884bf8c1c085d78d0': { name: 'rose', avatar: 'girl' },
+       '5b17a22f84bf8c1c085d78d1': { name: 'yinmi', avatar: 'woman' },
+       '5b18c2bae28caf1dab8c4352': { name: 'lucy', avatar: 'boy' }
+     }
+     */
     User.find({}, function (e, userdoc) {
         let users = {}
         userdoc.forEach(v => {
             users[v._id] = {name: v.user, avatar: v.avatar}
         })
-
         // 查询聊天信息
         // {'$or': [{from: user}, {to: user}]}
         Chat.find({'$or': [{from: user}, {to: user}]}, function (err, doc) {
@@ -131,6 +141,25 @@ Router.get('/getmsglist', function (req, res) {
             }
         })
     })
+})
+
+// 消息是否已读
+Router.post('/readmsg', function (req, res) {
+    // 当前的userid
+    const userid = req.cookies.userid
+    // 调用接口的当前用户
+    const {from} = req.body
+    Chat.update(
+        {from, to: userid},
+        {'$set': {read: true}},
+        {'multi': true},// update默认只修改第一个
+        function (err, doc) {
+            console.log(doc)
+            if (!err) {
+                return res.json({code: 0, num: doc.nModified})
+            }
+            return res.json({code: 1, msg: '修改失败'})
+        })
 })
 
 module.exports = Router;

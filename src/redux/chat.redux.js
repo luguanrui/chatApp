@@ -18,9 +18,9 @@ const MSG_RECV = 'MSG_RECV'
 const MSG_READ = 'MSG_READ'
 
 const initState = {
-    chatmsg: [],
-    users: {},
-    unread: 0
+    chatmsg: [], // 聊天的具体信息
+    users: {}, // 用户
+    unread: 0 // 未读信息的数量
 }
 
 // reducer
@@ -41,7 +41,15 @@ export function chat(state = initState, action) {
                 unread: state.unread + n
             }
         case MSG_READ:
-            return state
+            const {from, num} = action.payload
+            return {
+                ...state,
+                chatmsg: state.chatmsg.map(v => ({
+                    // 加判断是为了防止，影响其他人的消息是否已读
+                    ...v, read: from === v.from ? true : v.read
+                })),
+                unread: state.unread - num
+            }
         default:
             return state
     }
@@ -56,8 +64,8 @@ function msgRecv(msg, userid) {
     return {userid, type: MSG_RECV, payload: msg}
 }
 
-function msgRead(data) {
-    return {type: MSG_READ, payload: data}
+function msgRead({from, userid, num}) {
+    return {type: MSG_READ, payload: {from, userid, num}}
 }
 
 /**
@@ -71,6 +79,7 @@ export function getMsgList() {
             if (res.status === 200 && res.data.code === 0) {
                 // 获取当前登录用户的id
                 const userid = getState().user._id
+                // dispatch msgs，users，userid
                 dispatch(msgList(res.data.msgs, res.data.users, userid))
             }
         })
@@ -93,5 +102,19 @@ export function recvMsg() {
             const userid = getState().user._id
             dispatch(msgRecv(data, userid))
         })
+    }
+}
+
+// readMsg，告诉后台消息已读
+export function readMsg(from) {
+    return (dispatch, getState) => {
+        axios.post('/user/readmsg', {from})
+            .then(res => {
+                // 登录的用户信息
+                const userid = getState().user._id
+                if (res.status === 200 && res.data.code === 0) {
+                    dispatch(msgRead({userid, from, num: res.data.num}))
+                }
+            })
     }
 }

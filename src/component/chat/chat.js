@@ -1,12 +1,12 @@
 import React from 'react'
 import {List, InputItem, NavBar, Icon, Toast, Grid} from 'antd-mobile'
 import {connect} from 'react-redux'
-import {getMsgList, sendMsg, recvMsg} from '../../redux/chat.redux'
+import {getMsgList, sendMsg, recvMsg, readMsg} from '../../redux/chat.redux'
 import {getChatId} from '../../util'
 
 @connect(
     state => state,
-    {getMsgList, sendMsg, recvMsg}
+    {getMsgList, sendMsg, recvMsg, readMsg}
 )
 class Chat extends React.Component {
     constructor(props) {
@@ -24,8 +24,16 @@ class Chat extends React.Component {
             this.props.getMsgList()
             this.props.recvMsg()
         }
-        this.fixCarousel()
+        // const to = this.props.match.params.user
+        // this.props.readMsg(to)
 
+    }
+    // 在路由退出的时候标记消息已读,路由是组件
+    // 解决当前都处在聊天详情页的时候的问题，退出的时候，消息tab仍然显示未读消息
+    componentWillUnmount(){
+        // 标记消息已读
+        const to = this.props.match.params.user
+        this.props.readMsg(to)
     }
 
     // 修正Emoji的轮播bug
